@@ -4,7 +4,7 @@ from random import randint
 
 #musica
 mixer.init()
-mixer.music.load('fondo.ogg')
+mixer.music.load('fndo.ogg')
 mixer.music.play()
 #fire_sound = mixer.Sound('Efecto de sonido de un disparo.ogg')
 
