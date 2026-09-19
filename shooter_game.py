@@ -19,7 +19,7 @@ font2 = font.Font(None, 55)
 img_back = "galaxy.jpg"
 img_hero = "rocket.png"
 img_Enemy = "ufo.png"
-img_bullet = "bala.png"
+img_bullet = "bullet.png"
 
 score = 0
 lost = 0
