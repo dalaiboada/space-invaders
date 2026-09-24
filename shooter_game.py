@@ -17,6 +17,7 @@ font2 = font.Font(None, 55)
 win = font1.render('YEA WIN', True, (255, 255, 0))
 lose = font1.render('HA HA LOSER', True, (119, 240, 50))
 
+img_titular = 'titulo.png'
 img_back = "fondo.jpg"
 img_hero = "player.png"
 img_Enemy = "enemy.png"
@@ -107,6 +108,41 @@ class BulletSin(Bullet):
 		if self.rect.y < 0:
 			self.kill()
 
+class Button():
+	def __init__(self, x, y, ancho, alto, color, color_hover, texto, color_texto=(255, 255, 255), accion=None):
+		self.rect = Rect(x, y, ancho, alto)
+		self.color_actual = color
+		self.color_original = color
+		self.color_hover = color_hover
+		self.texto = texto
+		self.color_texto = color_texto
+		self.accion = accion
+  
+		# fuente
+		self.font = font.Font('fuente2.ttf', 28)
+		self.text_surface = self.font.render(self.texto, True, self.color_texto)
+
+		# centrar el texto en el botón
+		self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+  
+	def actualizar(self, pos_raton):
+		if self.rect.collidepoint(pos_raton):
+			draw.rect(ventana, self.color_hover, self.rect)
+			self.color_actual = self.color_hover
+		else:
+			draw.rect(ventana, self.color_original, self.rect)
+			self.color_actual = self.color_original
+  
+	def dibujar(self):
+		draw.rect(ventana, self.color_actual, self.rect, border_radius=10)
+		ventana.blit(self.text_surface, self.text_rect)
+
+	def verificar_click(self, pos_raton):
+		if self.rect.collidepoint(pos_raton) and self.accion:
+			self.accion()
+
+
+
 
 #personajes
 Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
@@ -117,6 +153,27 @@ for i in range(1, 6):
 	monsters.add(monster)
 
 bullets = sprite.Group()
+
+color_boton = (0, 128, 255)
+color_boton_hover = (0, 255, 128)
+
+btn_jugar = Button(
+    300, 
+    200, 
+    200, 
+    50, 
+    color_boton, 
+    color_boton_hover, 
+    "JUGAR", 
+    accion=lambda: cambiar_vista('juego')
+)
+lista_botones = [btn_jugar]
+
+control_vista = 'menu'
+
+def cambiar_vista(nuevo_vista):
+	global control_vista
+	control_vista = nuevo_vista
 
 # ciclo de juego
 finish = False
@@ -129,15 +186,23 @@ FPS = 80
 while ejecutando:
 	# Botón X
 	for evento in event.get():
+		# ventana
 		if evento.type == QUIT:
 			ejecutando = False
+
+		# teclado
 		elif evento.type == KEYDOWN:
-			if evento.key == K_SPACE:
+			if evento.key == K_w:
 				Neil_Armstrong.fire()
-			if evento.key == K_LSHIFT:
+
+			if evento.key == K_a:
 				Neil_Armstrong.bomb()
-			if evento.key == K_RSHIFT:
+
+			if evento.key == K_d:
 				Neil_Armstrong.fire_sin()
+			
+		#mouse
+
 
 	if finish != True:
 		ventana.blit(fondo, (0, 0))
