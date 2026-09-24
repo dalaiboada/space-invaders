@@ -31,7 +31,7 @@ win_height = 500
 
 ventana = display.set_mode((win_width, win_height))
 display.set_caption("Verschollen im Weltraum")
-fondo = transform.scale(image.load("galaxy.jpg"), (700, 500))
+fondo = transform.scale(image.load(img_back), (win_width, win_height))
 
 class Gamesprite(sprite.Sprite):
     def __init__(self, Player_image, Player_x, Player_y, size_x, size_y, Player_speed):
@@ -103,7 +103,7 @@ class BulletSin(Bullet):
 
 
 #personajes
-Neil_Armstrong = Player('rocket.png', 5, win_height - 100, 80, 100, 10)
+Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
 
 monsters = sprite.Group()
 for i in range(1, 6):
@@ -142,12 +142,15 @@ while ejecutando:
 		text_lose = font2.render('Fallos:'+ str(lost), 1, (227, 18, 18))
 		ventana.blit(text_lose, (10, 50))
 
-		Neil_Armstrong.update()
+		#renderiador
 		Neil_Armstrong.reset()
-		monsters.update()
 		monsters.draw(ventana)
-		bullets.update()
 		bullets.draw(ventana)
+
+		#movimiento
+		Neil_Armstrong.update()
+		monsters.update()
+		bullets.update()
 
 		collides = sprite.groupcollide(monsters, bullets, True, True)
 		for c in collides:
