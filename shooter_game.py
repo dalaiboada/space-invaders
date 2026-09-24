@@ -12,24 +12,25 @@ sonido_fondo.play(-1)
 
 font.init()
 font1 = font.Font(None, 18)
+font2 = font.Font(None, 55)
 
 win = font1.render('YEA WIN', True, (255, 255, 0))
 lose = font1.render('HA HA LOSER', True, (119, 240, 50))
 
-font2 = font.Font(None, 55)
-
-img_back = "galaxy.jpg"
-img_hero = "rocket.png"
-img_Enemy = "ufo.png"
-img_bullet = "bullet.png"
+img_back = "fondo.jpg"
+img_hero = "player.png"
+img_Enemy = "enemy.png"
+img_bullet = "bala.png"
+img_bullet_sin_rumbo = "bala_desviada.png"
+img_bullet_kabom = "bala_bomba.png"
 
 score = 0
 lost = 0
 goal = 11
 max_lost = 5 
 
-win_width = 700
-win_height = 500
+win_width = 900
+win_height = 650
 
 ventana = display.set_mode((win_width, win_height))
 display.set_caption("Verschollen im Weltraum")
@@ -56,16 +57,16 @@ class Player(Gamesprite):
 			self.rect.x += self.speed
 
 	def fire(self):
-		bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top, 15, 20, -15)
+		bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top, 64, 64, -15)
 		bullets.add(bullet)
 	
 	def fire_sin(self):
-		bullet = BulletSin(img_bullet, self.rect.centerx, self.rect.top, 15, 20, -15)
+		bullet = BulletSin(img_bullet_sin_rumbo, self.rect.centerx, self.rect.top, 15, 20, -15)
 		bullets.add(bullet)
 
 
 	def bomb(self):
-		bullet = Bullet(img_bullet, self.rect.centerx, self.rect.bottom-20, 15, 20, 0)
+		bullet = Bullet(img_bullet_kabom, self.rect.centerx, self.rect.bottom-32, 32, 32, 0)
 		bullets.add(bullet)
 
 
@@ -112,7 +113,7 @@ Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
 
 monsters = sprite.Group()
 for i in range(1, 6):
-	monster = Enemy(img_Enemy, randint(80, win_width - 80), -40, 80, 50, randint(1, 5))
+	monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
 	monsters.add(monster)
 
 bullets = sprite.Group()
@@ -121,7 +122,7 @@ bullets = sprite.Group()
 finish = False
 ejecutando = True
 reloj = time.Clock()
-FPS = 60
+FPS = 80
 
 
 
@@ -160,7 +161,7 @@ while ejecutando:
 		collides = sprite.groupcollide(monsters, bullets, True, True)
 		for c in collides:
 			score = score + 1
-			monster = Enemy(img_Enemy, randint(80, win_width - 80), -40, 80, 50, randint(1, 5))
+			monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 82, 82, randint(1, 5))
 			monsters.add(monster)
 
 		if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
